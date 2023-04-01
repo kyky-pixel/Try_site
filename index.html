@@ -1,5 +1,28 @@
 <html>
 <head>
+  <script>
+    // Базовая валюта
+    var base_currency = "RUB";
+    
+    // Целевые валюты
+    var target_currencies = "USD";
+    
+    // URL для запроса к API
+    var url = "https://open.er-api.com/v6/latest/" + base_currency;
+    
+    // Отправляем запрос и получаем ответ
+    fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      // Выводим результат конвертации в элемент с id="result"
+      document.getElementById("result").innerHTML = "1 " + base_currency + " = " + data.rates[target_currencies] + " " + target_currencies;
+    })
+    .catch(error => {
+      // Выводим ошибку в элемент с id="error"
+      document.getElementById("error").innerHTML = "Ошибка: " + error;
+    });
+    </script>
+
 <style>
 body {
   background: linear-gradient(to right, #ff9a9e, #fad0c4); /* Добавляем градиентный фон */
@@ -86,9 +109,21 @@ button {
 <button id="google" onclick="search('google')">Google</button>
 </div>
 </div>
+<h1>Конвертер валют</h1>
+<div id="result"></div>
+<div id="error"></div>
 <div id="rates">
 <div class="rate">BTC-USD: <span id="btc-usd"></span></div>
-<div class="rate">RUB-USD: <span id="rub-usd"></span></div> <!-- Меняем название курса на RUB-USD -->
+<div class="rate">RUB-USD: <span id="rub_usd"></span></p>
+  <script>
+  // Получаем данные из api
+  fetch("https://open.er-api.com/v6/latest/RUB")
+  .then(response => response.json())
+  .then(data => {
+    // Обновляем элемент с id="rub_usd" новым курсом
+    document.getElementById("rub_usd").innerHTML = data.rates["USD"];
+  });
+  </script></div> <!-- Меняем название курса на RUB-USD -->
 </div>
 <script>
 // Функция для поиска в выбранной поисковой системе
@@ -111,9 +146,9 @@ function getRates() {
     if (xhr.status == 200) { // Если статус успешный
       var data = JSON.parse(xhr.responseText); // Парсим JSON данные
       var btc_usd = data.bpi.USD.rate_float; // Получаем курс BTC-USD
-      var usd_rub = data.bpi.RUB.rate_float; // Получаем курс USD-RUB
+//      var usd_rub = data.bpi.RUB.rate_float; // Получаем курс USD-RUB
       var btc_usd_prev = localStorage.getItem("btc-usd"); // Получаем предыдущий курс BTC-USD из локального хранилища
-      document.getElementById("rub-usd").textContent = (data.bpi.RUB.rate_float / data.bpi.USD.rate_float).toFixed(4); // Получаем элемент для отображения курса RUB-USD и выводим его с четырьмя знаками после запятой
+      
       var rub_usd_prev = localStorage.getItem("rub-usd"); // Получаем предыдущий курс RUB-USD из локального хранилища
       var btc_usd_span = document.getElementById("btc-usd"); // Получаем элемент для отображения курса BTC-USD
       var rub_usd_span = document.getElementById("rub-usd"); // Получаем элемент для отображения курса RUB-USD

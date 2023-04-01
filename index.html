@@ -8,18 +8,10 @@
     var target_currencies = "USD";
     
     // URL для запроса к API
-    var url = "https://open.er-api.com/v6/latest/" + base_currency;
-    
-    // Отправляем запрос и получаем ответ
-    fetch(url)
+    fetch("https://open.er-api.com/v6/latest/RUB?to=USD")
     .then(response => response.json())
     .then(data => {
-      // Выводим результат конвертации в элемент с id="result"
-      document.getElementById("result").innerHTML = "1 " + base_currency + " = " + data.rates[target_currencies] + " " + target_currencies;
-    })
-    .catch(error => {
-      // Выводим ошибку в элемент с id="error"
-      document.getElementById("error").innerHTML = "Ошибка: " + error;
+      document.getElementById("result").innerHTML = "1 RUB = " + data.rates["USD"] + " USD";
     });
     </script>
 

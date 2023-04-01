@@ -1,0 +1,148 @@
+<html>
+<head>
+<style>
+body {
+  background: linear-gradient(to right, #ff9a9e, #fad0c4); /* Добавляем градиентный фон */
+  font-family: Arial, sans-serif;
+}
+
+h1 {
+  text-align: center;
+  margin-top: 50px;
+}
+
+input {
+  width: 300px;
+  height: 30px;
+  border: 1px solid #cccccc;
+  padding: 5px;
+}
+
+button {
+    width: 100px;
+    height: 40px;
+    border: none;
+    background-color: #ffffff;
+    color: #333333;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Добавляем тень для объемного вида */
+    margin: 10px; /* Добавляем отступ для разделения кнопок */
+  }
+
+#container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#search-box {
+    display: flex;
+    align-items: center; /* Добавляем выравнивание по центру по вертикали */
+  }
+  
+  input {
+    width: 300px;
+    height: 30px;
+    border: 1px solid #cccccc;
+    padding: 5px;
+    margin: 10px; /* Добавляем отступ для разделения поля ввода */
+  }
+
+  #rates {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px;
+    position: absolute; /* Делаем позиционирование абсолютным */
+    top: 25%; /* Размещаем блок в первой четверти по высоте */
+    left: calc(50% - (300px + (100px * 2) + (10px * 2)) / 2); /* Размещаем блок по центру по ширине */
+    background-color: transparent; /* Убираем белый фон */
+    box-shadow: none; /* Убираем тень */
+    width: calc(300px + (100px * 2) + (10px * 2)); /* Добавляем ширину равную ширине блока с поиском */
+  }
+  
+  .rate {
+    font-size: 14px;
+    padding: 10px; /* Добавляем отступ для разделения курсов */
+    background-color: #ffffff; /* Добавляем белый фон для каждого курса */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Добавляем тень для объемного вида для каждого курса */
+  }
+
+
+.red {
+
+  color: red;
+}
+
+.green {
+  color: green;
+}
+</style>
+</head>
+<body>
+<h1>Поиск в интернете</h1>
+<div id="container">
+<div id="search-box">
+<input type="text" id="query" placeholder="Введите запрос">
+<button id="bing" onclick="search('bing')">Bing</button>
+<button id="google" onclick="search('google')">Google</button>
+</div>
+</div>
+<div id="rates">
+<div class="rate">BTC-USD: <span id="btc-usd"></span></div>
+<div class="rate">RUB-USD: <span id="rub-usd"></span></div> <!-- Меняем название курса на RUB-USD -->
+</div>
+<script>
+// Функция для поиска в выбранной поисковой системе
+function search(engine) {
+  var query = document.getElementById("query").value; // Получаем значение из поля ввода
+  var url; // Объявляем переменную для адреса
+  if (engine == "bing") { // Если выбран Bing
+    url = "https://www.bing.com/search?q=" + query; // Формируем адрес для Bing
+  } else if (engine == "google") { // Если выбран Google
+    url = "https://www.google.com/search?q=" + query; // Формируем адрес для Google
+  }
+  window.open(url, "_blank"); // Открываем новую вкладку с адресом
+}
+
+// Функция для получения курсов валют с помощью API
+function getRates() {
+  var xhr = new XMLHttpRequest(); // Создаем объект для запроса
+  xhr.open("GET", "https://api.coindesk.com/v1/bpi/currentprice/RUB.json"); // Открываем соединение с API
+  xhr.onload = function() { // Когда получим ответ
+    if (xhr.status == 200) { // Если статус успешный
+      var data = JSON.parse(xhr.responseText); // Парсим JSON данные
+      var btc_usd = data.bpi.USD.rate_float; // Получаем курс BTC-USD
+      var usd_rub = data.bpi.RUB.rate_float; // Получаем курс USD-RUB
+      var btc_usd_prev = localStorage.getItem("btc-usd"); // Получаем предыдущий курс BTC-USD из локального хранилища
+      var rub_usd_span.textContent = rub_usd.toFixed(4); // Округляем и выводим курс RUB-USD с четырьмя знаками после запятой
+      var rub_usd_prev = localStorage.getItem("rub-usd"); // Получаем предыдущий курс RUB-USD из локального хранилища
+      var btc_usd_span = document.getElementById("btc-usd"); // Получаем элемент для отображения курса BTC-USD
+      var rub_usd_span = document.getElementById("rub-usd"); // Получаем элемент для отображения курса RUB-USD
+      btc_usd_span.textContent = btc_usd.toFixed(2); // Округляем и выводим курс BTC-USD
+      rub_usd_span.textContent = rub_usd.toFixed(2); // Округляем и выводим курс RUB-USD
+      if (btc_usd_prev) { // Если есть предыдущий курс BTC-USD
+        if (btc_usd < btc_usd_prev) { // Если курс упал
+          btc_usd_span.classList.add("red"); // Добавляем класс red для текста
+        } else if (btc_usd > btc_usd_prev) { // Если курс вырос
+          btc_usd_span.classList.add("green"); // Добавляем класс green для текста
+        }
+      }
+      if (rub_usd_prev) { // Если есть предыдущий курс RUB-USD
+        if (rub_usd < rub_usd_prev) { // Если курс упал
+          rub_usd_span.classList.add("red"); // Добавляем класс red для текста
+        } else if (rub_usd > rub_usd_prev) { // Если курс вырос
+          rub_usd_span.classList.add("green"); // Добавляем класс green для текста
+        }
+      }
+      localStorage.setItem("btc-usd", btc_usd); // Сохраняем текущий курс BTC-USD в локальное хранилище
+      localStorage.setItem("rub-usd", rub_usd); // Сохраняем текущий курс RUB-USD в локальное хранилище
+    }
+  };
+  xhr.send(); // Отправляем запрос
+}
+
+getRates(); // Вызываем функцию при загрузке страницы
+setInterval(getRates, 60000); // Вызываем функцию каждую минуту
+
+</script>
+</body>
+</html>

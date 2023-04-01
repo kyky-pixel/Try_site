@@ -113,7 +113,7 @@ function getRates() {
       var btc_usd = data.bpi.USD.rate_float; // Получаем курс BTC-USD
       var usd_rub = data.bpi.RUB.rate_float; // Получаем курс USD-RUB
       var btc_usd_prev = localStorage.getItem("btc-usd"); // Получаем предыдущий курс BTC-USD из локального хранилища
-      var rub_usd_span.textContent = rub_usd.toFixed(4); // Округляем и выводим курс RUB-USD с четырьмя знаками после запятой
+      document.getElementById("rub-usd").textContent = (data.bpi.RUB.rate_float / data.bpi.USD.rate_float).toFixed(4); // Получаем элемент для отображения курса RUB-USD и выводим его с четырьмя знаками после запятой
       var rub_usd_prev = localStorage.getItem("rub-usd"); // Получаем предыдущий курс RUB-USD из локального хранилища
       var btc_usd_span = document.getElementById("btc-usd"); // Получаем элемент для отображения курса BTC-USD
       var rub_usd_span = document.getElementById("rub-usd"); // Получаем элемент для отображения курса RUB-USD

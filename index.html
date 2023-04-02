@@ -1,19 +1,5 @@
 <html>
 <head>
-  <script>
-    // Базовая валюта
-    var base_currency = "RUB";
-    
-    // Целевые валюты
-    var target_currencies = "USD";
-    
-    // URL для запроса к API
-    fetch("https://open.er-api.com/v6/latest/RUB?to=USD")
-    .then(response => response.json())
-    .then(data => {
-      document.getElementById("result").innerHTML = "1 RUB = " + data.rates["USD"] + " USD";
-    });
-    </script>
 
 <style>
 body {
@@ -101,13 +87,10 @@ button {
 <button id="google" onclick="search('google')">Google</button>
 </div>
 </div>
-<h1>Конвертер валют</h1>
-<div id="result"></div>
-<div id="error"></div>
-<script src="script.js"></script>
+
 <div id="rates">
 <div class="rate">BTC-USD: <span id="btc-usd"></span></div>
-<div class="rate">RUB-USD: <span id="rub_usd"></span></p>
+<div class="rate">USD-RUB: <span id="usd_rub"></span></p>
   <script>
   // Получаем данные из api
   fetch("https://open.er-api.com/v6/latest/RUB")
@@ -139,14 +122,14 @@ function getRates() {
     if (xhr.status == 200) { // Если статус успешный
       var data = JSON.parse(xhr.responseText); // Парсим JSON данные
       var btc_usd = data.bpi.USD.rate_float; // Получаем курс BTC-USD
-//      var usd_rub = data.bpi.RUB.rate_float; // Получаем курс USD-RUB
+      var usd_rub = data.bpi.RUB.rate_float; // Получаем курс USD-RUB
       var btc_usd_prev = localStorage.getItem("btc-usd"); // Получаем предыдущий курс BTC-USD из локального хранилища
       
-      var rub_usd_prev = localStorage.getItem("rub-usd"); // Получаем предыдущий курс RUB-USD из локального хранилища
+      var usd_rub_prev = localStorage.getItem("rub-usd"); // Получаем предыдущий курс RUB-USD из локального хранилища
       var btc_usd_span = document.getElementById("btc-usd"); // Получаем элемент для отображения курса BTC-USD
-      var rub_usd_span = document.getElementById("rub-usd"); // Получаем элемент для отображения курса RUB-USD
+      var usd_rub_span = document.getElementById("rub-usd"); // Получаем элемент для отображения курса RUB-USD
       btc_usd_span.textContent = btc_usd.toFixed(2); // Округляем и выводим курс BTC-USD
-      rub_usd_span.textContent = rub_usd.toFixed(2); // Округляем и выводим курс RUB-USD
+      usd_rub_span.textContent = usd_rub.toFixed(2); // Округляем и выводим курс RUB-USD
       if (btc_usd_prev) { // Если есть предыдущий курс BTC-USD
         if (btc_usd < btc_usd_prev) { // Если курс упал
           btc_usd_span.classList.add("red"); // Добавляем класс red для текста
@@ -154,15 +137,15 @@ function getRates() {
           btc_usd_span.classList.add("green"); // Добавляем класс green для текста
         }
       }
-      if (rub_usd_prev) { // Если есть предыдущий курс RUB-USD
-        if (rub_usd < rub_usd_prev) { // Если курс упал
-          rub_usd_span.classList.add("red"); // Добавляем класс red для текста
-        } else if (rub_usd > rub_usd_prev) { // Если курс вырос
+      if (usd_rub_prev) { // Если есть предыдущий курс RUB-USD
+        if (usd_rub < usd_rub_prev) { // Если курс упал
+          usd_rub_span.classList.add("red"); // Добавляем класс red для текста
+        } else if (usd_rub > usd_rub_prev) { // Если курс вырос
           rub_usd_span.classList.add("green"); // Добавляем класс green для текста
         }
       }
       localStorage.setItem("btc-usd", btc_usd); // Сохраняем текущий курс BTC-USD в локальное хранилище
-      localStorage.setItem("rub-usd", rub_usd); // Сохраняем текущий курс RUB-USD в локальное хранилище
+      localStorage.setItem("USD-RUB", usd_rub); // Сохраняем текущий курс RUB-USD в локальное хранилище
     }
   };
   xhr.send(); // Отправляем запрос

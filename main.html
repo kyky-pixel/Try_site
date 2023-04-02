@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Crypto Exchange Rates</title>
+  <meta charset="UTF-8">
+  <script>
+    // Функция для получения и обновления курса обмена
+function updateExchangeRate(base, quote) {
+    const url = `https://api.coingecko.com/api/v3/simple/price?ids=${base}&vs_currencies=${quote}`;
+    fetch(url)
+      .then(response => response.json())
+      .then(data => {
+        const rate = data[base.toLowerCase()][quote.toLowerCase()];
+        document.getElementById(`${base.toLowerCase()}-${quote.toLowerCase()}`).textContent = rate.toLocaleString();
+      })
+      .catch(error => console.log(error));
+  }
+  
+  // Функция для обновления всех курсов обмена
+  function updateAllExchangeRates() {
+    updateExchangeRate('bitcoin', 'usd');
+    updateExchangeRate('ethereum', 'usd');
+    updateExchangeRate('sushi', 'usd');
+  }
+  
+  // Обновление курса обмена при загрузке страницы
+  document.addEventListener("DOMContentLoaded", updateAllExchangeRates);
+  
+  
+  
+  document.addEventListener("DOMContentLoaded", function() {
+    updateAllExchangeRates();
+    const updateButton = document.getElementById("update-btn");
+    if (updateButton) {
+      updateButton.addEventListener("click", updateAllExchangeRates);
+    }
+  });
+  
+  function calculate() {
+    var dollars = document.getElementById("dollars").value;
+    var bitcoin_rate = parseFloat(document.getElementById("bitcoin-usd").textContent.replace(',', ''));
+    var ethereum_rate = parseFloat(document.getElementById("ethereum-usd").textContent.replace(',', ''));
+    var sushi_rate = parseFloat(document.getElementById("sushi-usd").textContent.replace(',', ''));
+    var bitcoin = dollars * bitcoin_rate;
+    var ethereum = dollars * ethereum_rate;
+    var sushi = dollars * sushi_rate;
+    var result = "Bitcoin: " + bitcoin.toFixed(8) + " BTC\n" +
+                 "Ethereum: " + ethereum.toFixed(8) + " ETH\n" +
+                 "Sushi: " + sushi.toFixed(8) + " SUSHI";
+    alert(result);
+  }
+  
+  
+    
+  </script>
+  <style>
+    /* Главный заголовок */
+    h1 {
+      text-align: center;
+      font-size: 48px;
+      font-weight: bold;
+      margin-top: 50px;
+      margin-bottom: 50px;
+    }
+
+    body {
+        height: 100vh;
+        background: linear-gradient(to top, #3f51b5, #9c27b0);
+        background-repeat: no-repeat;
+
+      }
+      
+    /* Контейнер с квадратами */
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+    }
+  
+    .container.gradient-background {
+        background: none;
+      }
+      
+    /* Квадраты */
+    .square {
+      width: 200px;
+      height: 200px;
+      margin: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease;
+    }
+  
+    .currency-box {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      height: 150px;
+      width: 150px;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      margin: 10px;
+      border-radius: 5px;
+      box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+  
+    .currency-box p {
+      font-size: 20px;
+      margin-top: 10px;
+      margin-bottom: 0;
+    }
+  
+    /* Анимация наведения на квадраты */
+    .square:hover {
+      transform: scale(1.1);
+    }
+  
+    /* Текст внутри квадратов */
+    .value {
+      font-size: 36px;
+      font-weight: bold;
+    }
+  
+    /* Кнопка "Обновить" */
+    #update-btn {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        margin-top: 100px;
+        font-size: 24px;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+        display: block;
+        width: 200px;
+        margin: 0 auto;
+      }
+      
+      
+  
+    /* Анимация наведения на кнопку "Обновить" */
+    #update-btn:hover {
+      background-color: #3E8E41;
+    }
+  </style>
+
+</head>
+<body>
+  <h1>Курс обмена валют</h1>
+  <div class="container">
+    <div class="currency-box" style="background-color: #F7931A;">
+      <div class="value" id="bitcoin-usd">...</div>
+      <p>BTC - USD</p>
+    </div>
+    <div class="currency-box" style="background-color: #8C8C8C;">
+      <div class="value" id="ethereum-usd">...</div>
+      <p>ETH - USD</p>
+    </div>
+    <div class="currency-box" style="background-color: #00ACED;">
+      <div class="value" id="sushi-usd">...</div>
+      <p>SUSHI - USD</p>
+    </div>
+  </div>
+  <button id="update-btn">Обновить</button>
+  <label for="dollars">Введите количество долларов:</label>
+<input type="number" id="dollars" name="dollars">
+<button type="button" onclick="calculate()">Посчитать</button>
+
+</body>
+
+</html>
